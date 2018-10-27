@@ -1,0 +1,20 @@
+.Columncontainer {
+    margin:0.8rem;
+    border:1px solid lightgrey;
+    border-radius: 2px;
+    width:22rem;
+    display: flex;
+    flex-direction: column;
+    background: white;
+}
+
+.title {
+    padding: 0.8rem;
+
+}
+
+.tasklist {
+    padding: 8px;
+    flex-grow: 1;
+    min-height: 10rem;
+}

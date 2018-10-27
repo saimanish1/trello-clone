@@ -1,0 +1,141 @@
+.columncontainer {
+  margin: 0.8rem;
+  border:1px solid lightgrey;
+  border-radius: 3px;
+  background-color: #dfe3e6;
+  display: flex;
+  flex-direction: column;
+  width:30rem;
+
+}
+
+.title {
+  padding: 0.8rem;
+  position: relative;
+  
+  &__editIcon {
+    font-size: 1rem;
+    position: absolute;
+    right:1rem;
+    opacity: 0;
+
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+  }
+
+  &__edit {
+    padding:1rem;
+    margin: 0.8rem 0.8rem 0 0.8rem;
+    border-radius: 5px;
+    border:none;
+    width:28rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+
+}
+
+
+
+.cardlist {
+  padding:0.8rem;
+flex-grow:1;
+
+}
+
+.cardComposer {
+  border-radius: 3px;
+  padding:5px;
+  color: #6b808c;
+
+  background-color: #dfe3e6;
+  transition: background 0.3s ease;
+  &:hover {
+    background: darken(#dfe3e6, 8%);
+  cursor: pointer;
+  }
+
+
+}
+
+.plusSign {
+  margin-right: 3px;
+  transform: scale(1.5);
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+
+.card_title__inedit {
+  width: 95%;
+  margin:1rem;
+  margin-left: 0.7rem;
+  border:none;
+  border-radius: 3px;
+  height: 6rem;
+  font-family: inherit;
+  resize: none;
+  padding: 0.7rem;
+  outline: none;
+  overflow: hidden;
+  overflow-wrap: break-word;
+
+
+}
+
+.card_title__addcard{
+  background-color: #5aac44;
+  box-shadow: 0 1px 0 0 #3f6f21;
+  margin-left: 0.5rem;
+  margin-bottom:0.8rem ;
+  border: none;
+  padding: 1rem 1.3rem 1rem 1rem;
+  border-radius: 3px;
+  color:#fff;
+  font-weight: 700;
+  cursor:pointer;
+
+
+  &:hover {
+    background-color: darken(#5aac44,5%);
+  }
+}
+
+.card_title__closeicon{
+  position: relative;
+  top:5px;
+  cursor: pointer;
+
+
+}
+
+.addcard_title{
+  
+  color: #6b808c;
+  padding: 1rem 1rem 1rem 2.4rem;
+  cursor: pointer;
+
+  &__addicon{
+    margin-right: 0.3rem;
+    font-weight: 700;
+    position: relative;
+    top:3.2rem;
+    left:4px;
+    cursor: pointer;
+  }
+
+  &:hover{
+    background-color: darken(#dfe3e6, 10%);
+    text-decoration: underline;
+  color:#17394d;
+  }
+}
+
+.cardlist__container{
+  max-height: 55vh;
+  overflow: auto;
+}
