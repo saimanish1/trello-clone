@@ -7,7 +7,7 @@ const BoardSchema = new Schema({
         ref:'users'
     },
     title:{type:String, required:true},
-    columnOrder:[{type:Schema.Types.ObjectId, ref:'columns'}]
+    columnOrder:[{type:String, ref:'columns'}]
     
 
 });

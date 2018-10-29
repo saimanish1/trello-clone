@@ -32,7 +32,7 @@ columnRouter.post('/',checkAuth,(req,res,next)=>{
                                 return res.status(404).json({message:'No Board exists of provided id'})
                             }
                             const newColumnOrder= Array.from(board.columnOrder);
-                            newColumnOrder.push(result._id);
+                            newColumnOrder.push(result.columnId);
                             board.set({columnOrder: newColumnOrder});
                             board.save()
                                 .then((result2=>res.status(201).json({message:'New Column Added and also updated columnOrder in board',column:result,board:result2})))
@@ -108,7 +108,7 @@ columnRouter.get('/all/:boardId',checkAuth, (req,res,next)=>{
             return res.status(404).json({ message: 'Board with given id was not found' });
         }
         Column.find({board:boardId})
-        .select('cardIds title _id')
+        .select('cardIds title columnId')
         .exec()
         .then(columns=>{
             

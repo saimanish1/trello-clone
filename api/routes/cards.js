@@ -27,7 +27,7 @@ cardRouter.post('/',checkAuth,(req,res,next)=>{
            newCard
                .save()
                .then((result=>{
-                   Column.findById(columnId)
+                   Column.findOne({columnId})
                        .exec()
                        .then((column=>{
                            if(!column){
@@ -91,7 +91,7 @@ cardRouter.post('/card/:cardId',checkAuth,(req,res)=>{
     const {cardId}=req.params;
 
     if(req.query.title) {
-        Card.findByIdAndUpdate(cardId,{content:req.body.title})
+        Card.findOneAndUpdate({cardId},{content:req.body.title})
         .exec()
         .then(card=>{
                 if(!card){
@@ -108,10 +108,11 @@ cardRouter.post('/reorder/samecolumn',checkAuth,async (req,res,next)=>{
   try{
       const {sameColumnId,samecolumnCardIds}= req.body;
       console.log(sameColumnId,samecolumnCardIds);
-      const column = await Column.findOne({_id:sameColumnId});
+      const column = await Column.findOne({columnId:sameColumnId});
       if(!column){
           return res.status(404).json({message:'unable to find column of provided id'});
       }
+      console.log(column);
       column.set({cardIds:samecolumnCardIds});
       const savedColumn = await column.save();
 
@@ -134,14 +135,16 @@ cardRouter.post('/reorder/differentcolumn',checkAuth,async (req,res,next)=>{
         console.log(removedColumnCardIds);
         console.log(addedColumnCardIds);
 
-        const removedcolumn = await Column.findOne({_id:removedColumnId});
-        removedcolumn.set({cardIds:removedColumnCardIds});
-        await removedcolumn.save();
+        const removedcolumn = await Column.findOneAndUpdate({columnId:removedColumnId},{cardIds:removedColumnCardIds});
+       const addedcolumn = await Column.findOneAndUpdate({columnId:addedColumnId},{cardIds:addedColumnCardIds});
 
-        const addedcolumn = await Column.findOne({_id:addedColumnId});
-        addedcolumn.set({cardIds:addedColumnCardIds});
-        await addedcolumn.save();
-
+//   removedcolumn.set({cardIds:removedColumnCardIds});
+//      const res=   await removedcolumn.save();
+//         console.log('res',res);
+//         const addedcolumn = await Column.findOne({columnId:addedColumnId});
+//         addedcolumn.set({cardIds:addedColumnCardIds});
+//      const res2=   await addedcolumn.save();
+// console.log('res2',res2);
         return res.status(200).json({message:'different column reorder success'});
     }
     catch (e) {
