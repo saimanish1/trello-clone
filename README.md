@@ -7,7 +7,7 @@ Trying to replicate trello.
 
 1. npm install or yarn.
 2. add .env file to the root directory.
-3. In the .env file, add MONGODB_CONNECT_LINK to connect you MongoDB and SECRET for jwt sign verification.
+3. In the .env file, add MONGODB_CONNECT_LINK to connect your MongoDB and SECRET for jwt sign verification.
 4. yarn start.
 
 ### Client
