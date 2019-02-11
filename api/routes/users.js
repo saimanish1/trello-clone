@@ -4,7 +4,7 @@ const { validateRegisterInput } = require('../../validation/register');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const { validateLoginInput } = require('../../validation/login');
+const validateLoginInput = require('../../validation/login');
 const checkAuth = require('../../middleware/check-auth');
 
 require('dotenv').config();
@@ -60,40 +60,35 @@ userRouter.post('/register', (req, res, next) => {
 // @desc login the user
 // @ access Public
 
-userRouter.post('/login', (req, res, next) => {
-  const { errors, isValid } = validateLoginInput(req.body);
-  if (!isValid) {
-    return res.status(400).json(errors);
+userRouter.post('/login', async (req, res, next) => {
+  try {
+    const { errors, isValid } = validateLoginInput(req.body);
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+    const { email, password } = req.body;
+    const user = await User.findOne({ email }).exec();
+    if (!user) {
+      return res.status(401).json({ message: 'Auth Failed' });
+    }
+    const result = await bcrypt.compare(password, user.password);
+    if (result) {
+      const token = jwt.sign(
+        {
+          email: user.email,
+          userId: user._id,
+        },
+        process.env.SECRET,
+        {
+          expiresIn: '10h',
+        }
+      );
+      return res.status(200).json({ message: 'Auth Successful', token });
+    }
+    res.status(401).json({ message: 'Auth Failed' });
+  } catch (e) {
+    throw new Error(e.message);
   }
-  const { email, password } = req.body;
-  User.findOne({ email })
-    .exec()
-    .then(user => {
-      if (!user) {
-        return res.status(401).json({ message: 'Auth Failed' });
-      }
-      bcrypt
-        .compare(password, user.password)
-        .then(result => {
-          console.log(result);
-          if (result) {
-            const token = jwt.sign(
-              {
-                email: user.email,
-                userId: user._id,
-              },
-              process.env.SECRET,
-              {
-                expiresIn: '10h',
-              }
-            );
-            return res.status(200).json({ message: 'Auth Successful', token });
-          }
-          res.status(401).json({ message: 'Auth Failed' });
-        })
-        .catch(error => res.status(500).json(error));
-    })
-    .catch(error => res.status(500).json(error));
 });
 
 // @route DELETE /api/user/:userId
