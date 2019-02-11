@@ -1,9 +1,8 @@
-const express = require( 'express');
-const Card = require( "../../models/Card");
-const internalErrorResponse = require( "../../utils/internalErrorResponse");
-const checkAuth = require( "../../middleware/check-auth");
-const Column = require( "../../models/Column");
-
+const express = require('express');
+const Card = require('../../models/Card');
+const internalErrorResponse = require('../../utils/internalErrorResponse');
+const checkAuth = require('../../middleware/check-auth');
+const Column = require('../../models/Column');
 
 const cardRouter = express.Router();
 
@@ -12,74 +11,62 @@ const cardRouter = express.Router();
 // desc create a card
 // access private
 
-cardRouter.post('/',checkAuth,(req,res,next)=>{
-   
-   const {title,columnId,cardId}=req.body;
-   Card.find()
-       .exec()
-       .then(()=>{
-           const newCard=new Card({
-               title,
-               column:columnId,
-               cardId
-           });
-
-           newCard
-               .save()
-               .then((result=>{
-                   Column.findById(columnId)
-                       .exec()
-                       .then((column=>{
-                           if(!column){
-                               return res.status(404).json({message:'Column of provided id doesn\'t exist'})
-                           }
-                           const newCardIds=Array.from(column.cardIds);
-                           newCardIds.push(result.cardId);
-                           column.set({cardIds:newCardIds});
-                           column.save()
-                               .then(result2=>res.status(201).json({message:'new card is created and also cardIds in column is also updated', card:result, column:result2}))
-                               .catch(error=>internalErrorResponse(error,res))
-                       }))
-                       .catch(error=>internalErrorResponse(error,res))
-               }))
-               .catch(error=>internalErrorResponse(error,res));
-       })
-       .catch(error=>internalErrorResponse(error,res));
+cardRouter.post('/', checkAuth, async (req, res, next) => {
+  try {
+    const { title, columnId, cardId } = req.body;
+    await Card.find().exec();
+    const newCard = new Card({
+      title,
+      column: columnId,
+      cardId,
+    });
+    const result = await newCard.save();
+    const column = await Column.findById(columnId).exec();
+    if (!column) {
+      return res
+        .status(404)
+        .json({ message: "Column of provided id doesn't exist" });
+    }
+    const newCardIds = Array.from(column.cardIds);
+    newCardIds.push(result.cardId);
+    column.set({ cardIds: newCardIds });
+    const result2 = await column.save();
+    return res.status(201).json({
+      message: 'new card is created and also cardIds in column is also updated',
+      card: result,
+      column: result2,
+    });
+  } catch (e) {
+    return internalErrorResponse(error, res);
+  }
 });
 
-const findAllCards= (columnId)=> Card.find({column:columnId}).select('cardId title')
+const findAllCards = columnId =>
+  Card.find({ column: columnId }).select('cardId title');
 
 // route POST /api/cards/getAllCards
 // @ desc we send all columns of the user created to get all cards of each column
 // required JSON with with columnIds
 // access private
-cardRouter.post('/getallcards',checkAuth, async (req,res)=>{
-    try {
-        const {columnIds} = req.body;
-        
-        let totalCards=[];
-       if(columnIds&&columnIds.length>0){
-           let i=0;
-         for(const columnId of columnIds){
-            const cards= await findAllCards(columnId);
+cardRouter.post('/getallcards', checkAuth, async (req, res) => {
+  try {
+    const { columnIds } = req.body;
 
-            if(cards.length>0){
-                totalCards.push(cards);
+    let totalCards = [];
+    if (columnIds && columnIds.length > 0) {
+      let i = 0;
+      for (const columnId of columnIds) {
+        const cards = await findAllCards(columnId);
 
-            }
-         }
-         return res.status(200).json({message:'Success', cards:totalCards})
-       }
-
-
-
+        if (cards.length > 0) {
+          totalCards.push(cards);
+        }
+      }
+      return res.status(200).json({ message: 'Success', cards: totalCards });
     }
-
-    catch (error) {
-        internalErrorResponse(error,res)
-    }
-   
-
+  } catch (error) {
+    internalErrorResponse(error, res);
+  }
 });
 
 // route POST /api/cards/card/:cardId
@@ -87,70 +74,88 @@ cardRouter.post('/getallcards',checkAuth, async (req,res)=>{
 // required: query={title=true}
 // access private
 
-cardRouter.post('/card/:cardId',checkAuth,(req,res)=>{
-    const {cardId}=req.params;
+cardRouter.post('/card/:cardId', checkAuth, (req, res) => {
+  const { cardId } = req.params;
 
-    if(req.query.title) {
-        Card.findByIdAndUpdate(cardId,{content:req.body.title})
-        .exec()
-        .then(card=>{
-                if(!card){
-                    return res.status(404).json({message:'unable to find card of provided Id'});
-                }
-                return res.status(201).json({message:'card content/title updated',data:card.content})
-        })
-        .catch(error=>internalErrorResponse(error,res))
-    }
-});
-
-
-cardRouter.post('/reorder/samecolumn',checkAuth,async (req,res,next)=>{
-  try{
-      const {sameColumnId,samecolumnCardIds}= req.body;
-      console.log(sameColumnId,samecolumnCardIds);
-      const column = await Column.findOne({_id:sameColumnId});
-      if(!column){
-          return res.status(404).json({message:'unable to find column of provided id'});
-      }
-      column.set({cardIds:samecolumnCardIds});
-      const savedColumn = await column.save();
-
-      return res.status(200).json({message:'same column reorder success',savedColumn});
-  }
-  catch (e) {
-      return internalErrorResponse(e,res);
-  }
-});
-
-
-cardRouter.post('/reorder/differentcolumn',checkAuth,async (req,res,next)=>{
-    try{
-        const {removedColumnId,addedColumnId,removedColumnCardIds,addedColumnCardIds}=req.body;
-        if(!(removedColumnId && addedColumnId && removedColumnCardIds && addedColumnCardIds)){
-           return res.status(400).json({message:'some fields are missing'});
+  if (req.query.title) {
+    Card.findByIdAndUpdate(cardId, { content: req.body.title })
+      .exec()
+      .then(card => {
+        if (!card) {
+          return res
+            .status(404)
+            .json({ message: 'unable to find card of provided Id' });
         }
-        console.log(removedColumnId);
-        console.log(addedColumnId);
-        console.log(removedColumnCardIds);
-        console.log(addedColumnCardIds);
+        return res
+          .status(201)
+          .json({ message: 'card content/title updated', data: card.content });
+      })
+      .catch(error => internalErrorResponse(error, res));
+  }
+});
 
-        const removedcolumn = await Column.findOne({_id:removedColumnId});
-        removedcolumn.set({cardIds:removedColumnCardIds});
-        await removedcolumn.save();
-
-        const addedcolumn = await Column.findOne({_id:addedColumnId});
-        addedcolumn.set({cardIds:addedColumnCardIds});
-        await addedcolumn.save();
-
-        return res.status(200).json({message:'different column reorder success'});
+cardRouter.post('/reorder/samecolumn', checkAuth, async (req, res, next) => {
+  try {
+    const { sameColumnId, samecolumnCardIds } = req.body;
+    console.log(sameColumnId, samecolumnCardIds);
+    const column = await Column.findOne({ _id: sameColumnId });
+    if (!column) {
+      return res
+        .status(404)
+        .json({ message: 'unable to find column of provided id' });
     }
-    catch (e) {
-        return internalErrorResponse(e,res);
+    column.set({ cardIds: samecolumnCardIds });
+    const savedColumn = await column.save();
+
+    return res
+      .status(200)
+      .json({ message: 'same column reorder success', savedColumn });
+  } catch (e) {
+    return internalErrorResponse(e, res);
+  }
+});
+
+cardRouter.post(
+  '/reorder/differentcolumn',
+  checkAuth,
+  async (req, res, next) => {
+    try {
+      const {
+        removedColumnId,
+        addedColumnId,
+        removedColumnCardIds,
+        addedColumnCardIds,
+      } = req.body;
+      if (
+        !(
+          removedColumnId &&
+          addedColumnId &&
+          removedColumnCardIds &&
+          addedColumnCardIds
+        )
+      ) {
+        return res.status(400).json({ message: 'some fields are missing' });
+      }
+      console.log(removedColumnId);
+      console.log(addedColumnId);
+      console.log(removedColumnCardIds);
+      console.log(addedColumnCardIds);
+
+      const removedcolumn = await Column.findOne({ _id: removedColumnId });
+      removedcolumn.set({ cardIds: removedColumnCardIds });
+      await removedcolumn.save();
+
+      const addedcolumn = await Column.findOne({ _id: addedColumnId });
+      addedcolumn.set({ cardIds: addedColumnCardIds });
+      await addedcolumn.save();
+
+      return res
+        .status(200)
+        .json({ message: 'different column reorder success' });
+    } catch (e) {
+      return internalErrorResponse(e, res);
     }
-})
+  }
+);
 
-
-
-
-
-module.exports =cardRouter;
+module.exports = cardRouter;
