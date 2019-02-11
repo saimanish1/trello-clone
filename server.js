@@ -14,8 +14,8 @@ console.log(process.env.MONGODB_CONNECT_LINK);
 
 mongoose
   .connect(
-    'mongodb://localhost/admin',
-    { useNewUrlParser: true }
+    'mongodb://localhost/trello',
+    { useNewUrlParser: true, useCreateIndex: true }
   )
   .then(() => {
     console.log('Database connected');

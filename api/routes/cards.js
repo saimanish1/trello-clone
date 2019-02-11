@@ -37,7 +37,7 @@ cardRouter.post('/', checkAuth, async (req, res, next) => {
       column: result2,
     });
   } catch (e) {
-    return internalErrorResponse(error, res);
+    return internalErrorResponse(e, res);
   }
 });
 
@@ -74,23 +74,25 @@ cardRouter.post('/getallcards', checkAuth, async (req, res) => {
 // required: query={title=true}
 // access private
 
-cardRouter.post('/card/:cardId', checkAuth, (req, res) => {
-  const { cardId } = req.params;
+cardRouter.post('/card/:cardId', checkAuth, async (req, res) => {
+  try {
+    const { cardId } = req.params;
 
-  if (req.query.title) {
-    Card.findByIdAndUpdate(cardId, { content: req.body.title })
-      .exec()
-      .then(card => {
-        if (!card) {
-          return res
-            .status(404)
-            .json({ message: 'unable to find card of provided Id' });
-        }
+    if (req.query.title) {
+      const card = await Card.findByIdAndUpdate(cardId, {
+        content: req.body.title,
+      }).exec();
+      if (!card) {
         return res
-          .status(201)
-          .json({ message: 'card content/title updated', data: card.content });
-      })
-      .catch(error => internalErrorResponse(error, res));
+          .status(404)
+          .json({ message: 'unable to find card of provided Id' });
+      }
+      return res
+        .status(201)
+        .json({ message: 'card content/title updated', data: card.content });
+    }
+  } catch (e) {
+    return internalErrorResponse(e, res);
   }
 });
 
