@@ -78,10 +78,10 @@ class Boards extends Component {
             <h3 className={classes.board__empty__title}>
               No boards were created
             </h3>
-            <Backdrop clickedOutside={this.onBoardTitleOutsideClicked}>
-              {' '}
-              {this.boardWrapper()}
-            </Backdrop>
+            {/*<Backdrop clickedOutside={this.onBoardTitleOutsideClicked}>*/}
+            {/*{' '}*/}
+            {/*{this.boardWrapper()}*/}
+            {/*</Backdrop>*/}
           </React.Fragment>
         );
       }
