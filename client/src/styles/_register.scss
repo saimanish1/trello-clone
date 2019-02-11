@@ -1,0 +1,46 @@
+.register {
+  margin: 3rem auto;
+  width:44rem;
+}
+
+.register__title {
+  font-size: 3.8rem;
+  font-weight: bold;
+  line-height: 4.8rem;
+}
+
+.register__span {
+  font-size:1.8rem;
+  margin-right: 5px;
+}
+
+.register__anchor-tag {
+  color:#fff;
+  font-size: 1.8rem;
+
+}
+
+.register__Button {
+  border-radius: 3px;
+  background: #e2e4e6;
+  color: #8c8c8c;
+  cursor: pointer;
+  outline:none;
+  border:none;
+  padding:1rem;
+  width:100%;
+  font-weight: bolder;
+  font-size: 1.6rem;
+}
+
+.button--green {
+  background: #61bd4f;
+  color:white;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+  transition: background 0.6s ease;
+  &:hover {
+    background: #5aac44;
+  }
+}
+
+

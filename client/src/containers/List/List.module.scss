@@ -1,0 +1,122 @@
+.listcontainer {
+  display: flex;
+  align-items: flex-start;
+  margin-left: 2.5rem;
+  overflow-x:auto;
+  min-height: 90vh;
+
+}
+
+.add_list__wrapper{
+  background-color: #dfe3e6;
+  margin: 0.8rem;
+  border-radius: 3px;
+  padding:0 3px 3px 3px;
+
+}
+
+
+.add_list {
+  margin: 0.8rem;
+  cursor: pointer;
+  border: none;
+  background-color: rgba(0,0,0,.12);
+  border-radius: 3px;
+  min-height: 3.4rem;
+  padding: 0.6rem;
+  transition: background 85ms ease-in,opacity 40ms ease-in,border-color 85ms ease-in;
+  width: 27rem;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color:darken(#fff,10%);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  &:hover{
+    background-color: rgba(0,0,0,0.2);
+
+  }
+
+  &__addicon{
+    font-size: 2.5rem;
+    margin-left: 1rem;
+  }
+
+
+  &__text {
+    margin-left: 6px;
+  }
+}
+
+.list_title__inedit {
+  margin: 0 0.1rem 1rem 0.1rem;
+  position: relative;
+  top:5px;
+  background: #fff;
+  border:1px solid #5ba4cf;
+  box-shadow: 0 0 0 1px #5ba4cf;
+  width: 27rem;
+  padding:0.6rem 0.8rem;
+  border-radius: 3px;
+  color:#17394d;
+  font-size: 1.4rem;
+  font-weight: 400;
+  display: block;
+
+}
+
+.add_list__controls{
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin:0.5rem;
+
+  &__close_icon{
+    position: relative;
+    top:3px;
+    left:10px;
+    cursor: pointer;
+
+    & path {
+      fill: #798d99;
+      transition: all 0.2s ease;
+    }
+
+    &:hover{
+
+      & path {
+        fill: darken(#798d99,20%);
+      }
+    }
+
+  }
+
+
+  &__button{
+    border:none;
+    background-color: #519839;
+    box-shadow: 0 1px 0 0 #3f6f21;
+    color:#fff;
+    height: 3rem;
+    padding:8px;
+    cursor: pointer;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1rem;
+    transition-property: background-color,border-color,box-shadow;
+    transition-duration: 85ms;
+    transition-timing-function: ease;
+  border-radius: 3px;
+
+
+  &:hover{
+      background: darken(#519839, 5%);
+    }
+
+
+
+  }
+
+
+}

@@ -1,0 +1,8 @@
+.container {
+    border: 1px solid lightgrey;
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    border-radius: 2px;
+    background: white;
+
+}

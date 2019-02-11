@@ -1,0 +1,38 @@
+.container {
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  padding: 0.8rem;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(9,45,66,.25);
+  transition: background 0.3s ease;
+  &:hover{
+    background: darken(#fff,8%);
+  }
+
+
+}
+.container:not(:last-child){
+  margin-bottom: 0.8rem;
+}
+
+.cardtitleEditIcon {
+  position: absolute;
+  right:1rem;
+  cursor: pointer;
+  opacity: 0;
+  &:hover{
+    opacity: 1;
+  }
+}
+
+.cardtitle {
+  width: 100%;
+  border:none;
+  height: 3rem;
+  font-size: 1.6rem;
+
+}
+
+
+

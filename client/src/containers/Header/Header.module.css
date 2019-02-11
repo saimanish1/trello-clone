@@ -1,0 +1,46 @@
+.header {
+    background: rgba(0,0,0,.15);
+    width:100%;
+    height:4rem;
+}
+
+.logo {
+    position: relative;
+    left:50%;
+    top:2px;
+    transform: translateX(-50%);
+
+
+}
+
+.logo path {
+    fill: hsla(0,0%,100%,.3);
+}
+
+.header__logout {
+    position: absolute;
+    right:7rem;
+    top:1rem;
+    cursor:pointer;
+    text-decoration: none;
+    color: #cdd2dA;
+}
+
+.header__login {
+    position: absolute;
+    right:15rem;
+    top:1rem;
+    cursor:pointer;
+    text-decoration: none;
+    color: #cdd2dA;
+}
+
+
+.header__boards {
+    position: absolute;;
+    left:1rem;
+    top:1rem;
+    cursor: pointer;
+    text-decoration: none;
+    color:#cdd2dA;
+}
