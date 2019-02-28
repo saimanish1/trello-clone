@@ -21,7 +21,7 @@ cardRouter.post('/', checkAuth, async (req, res, next) => {
       cardId,
     });
     const result = await newCard.save();
-    const column = await Column.findById(columnId).exec();
+    const column = await Column.findOne({ columnId }).exec();
     if (!column) {
       return res
         .status(404)
@@ -79,7 +79,7 @@ cardRouter.post('/card/:cardId', checkAuth, async (req, res) => {
     const { cardId } = req.params;
 
     if (req.query.title) {
-      const card = await Card.findByIdAndUpdate(cardId, {
+      const card = await Card.findOneAndUpdate(cardId, {
         content: req.body.title,
       }).exec();
       if (!card) {
@@ -100,7 +100,7 @@ cardRouter.post('/reorder/samecolumn', checkAuth, async (req, res, next) => {
   try {
     const { sameColumnId, samecolumnCardIds } = req.body;
     console.log(sameColumnId, samecolumnCardIds);
-    const column = await Column.findOne({ _id: sameColumnId });
+    const column = await Column.findOne({ columnId: sameColumnId });
     if (!column) {
       return res
         .status(404)
@@ -138,16 +138,12 @@ cardRouter.post(
       ) {
         return res.status(400).json({ message: 'some fields are missing' });
       }
-      console.log(removedColumnId);
-      console.log(addedColumnId);
-      console.log(removedColumnCardIds);
-      console.log(addedColumnCardIds);
 
-      const removedcolumn = await Column.findOne({ _id: removedColumnId });
+      const removedcolumn = await Column.findOne({ columnId: removedColumnId });
       removedcolumn.set({ cardIds: removedColumnCardIds });
       await removedcolumn.save();
 
-      const addedcolumn = await Column.findOne({ _id: addedColumnId });
+      const addedcolumn = await Column.findOne({ columnId: addedColumnId });
       addedcolumn.set({ cardIds: addedColumnCardIds });
       await addedcolumn.save();
 

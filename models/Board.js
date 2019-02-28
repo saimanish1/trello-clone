@@ -1,17 +1,15 @@
-const mongoose = require( "mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const BoardSchema = new Schema({
-    user:{
-        type:Schema.Types.ObjectId,
-        ref:'users'
-    },
-    title:{type:String, required:true},
-    columnOrder:[{type:Schema.Types.ObjectId, ref:'columns'}]
-    
-
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+  },
+  title: { type: String, required: true },
+  columnOrder: [{ type: String, ref: 'columns' }],
 });
 
-const Board = mongoose.model('boards',BoardSchema);
+const Board = mongoose.model('boards', BoardSchema);
 
-module.exports= Board;
+module.exports = Board;
