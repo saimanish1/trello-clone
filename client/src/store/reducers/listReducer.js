@@ -95,7 +95,7 @@ const listReducer = (state = initialState, action) => {
       const { columns, columnOrder } = action.payload;
       const newColumnOrder = columnOrder;
       const newColumns = columns.reduce((accum, currentValue, currentIndex) => {
-        accum[currentValue._id] = {
+        accum[currentValue.columnId] = {
           title: currentValue.title,
           id: currentValue._id,
           cardIds: currentValue.cardIds,
