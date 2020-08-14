@@ -145,6 +145,7 @@ class List extends Component {
           </React.Fragment>
         );
       } else {
+        let col = this.props.list.columns;
         listData = (
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Droppable
@@ -159,7 +160,7 @@ class List extends Component {
                   ref={provided.innerRef}
                 >
                   {this.props.list.columnOrder.map((columnId, index) => {
-                    const column = this.props.list.columns[columnId];
+                    const column = col[columnId];
                     const cards = column.cardIds.map(
                       cardId => this.props.cards.cards[cardId]
                     );
